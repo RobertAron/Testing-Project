@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 
 import org.junit.Test;
@@ -28,7 +29,7 @@ public class TokenTests {
 		assertEquals(nullExpected.toString(),nullActual.toString());
 	}
 	
-	
+	*/
 	@Test
 	public void test_Open_Character_Stream_Does_Exsist() {
 		
@@ -36,10 +37,15 @@ public class TokenTests {
 		Printtokens2 myTokenTest = new Printtokens2();
 		FileReader fr;
 		try {
-			fr = new FileReader("./TestingFiles/Open_Stream_Does_Exsist.txt");
+			fr = new FileReader("./TestingFiles/Default_Test_File.txt");
 			BufferedReader outputExpected = new BufferedReader(fr);
-			BufferedReader outputActual = myTokenTest.open_character_stream("./TestingFiles/Open_Stream_Does_Exsist.txt");
-			assertEquals(outputExpected,outputActual);
+			BufferedReader outputActual = myTokenTest.open_character_stream("./TestingFiles/Default_Test_File.txt");
+			try {
+				assertEquals(outputExpected.readLine(),outputActual.readLine());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -47,7 +53,7 @@ public class TokenTests {
 		
 
 	}
-	*/
+	
 	@Test
 	public void test_Open_Character_Stream_Doesnt_Exsist() {
 		
@@ -58,6 +64,8 @@ public class TokenTests {
 		
 		assertEquals(null,outputActual);
 	}
+	
+
 	
 	
 
