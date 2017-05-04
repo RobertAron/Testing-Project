@@ -13,8 +13,12 @@ import org.junit.Test;
 public class TokenTests {
 	static String defaultFile = "./TestingFiles/Default_Test_File.txt";
 	static String noTextFile = "./TestingFiles/Test_File_No_Text.txt";
-	static String onlyReturnsFile = "./TestingFiles/Test_File_Non_Characters.txt";
-	static String specialCharFile = "./TestingFiles/Test_File_Special_Char_Start.txt";
+	static String whiteSpaceFile = "./TestingFiles/Test_File_White_Space.txt";
+	static String specialStartFile = "./TestingFiles/Test_File_Special_Start.txt";
+	static String stringToEofFile = "./TestingFiles/Test_File_String_EOF.txt";
+	static String commentNoEnd = "./TestingFiles/Test_File_Comment_Without_End.txt";
+	static String immediateClosedStringFile = "./TestingFiles/Test_File_Immediate_Closed_String.txt";
+	static String commentToSpecialFile = "./TestingFiles/Test_File_Comment_To_Special.txt";
 	/*
 	 * I'm not sure how to test two Buffered Readers with STD input
 	 * Might Look Into This Later
@@ -163,49 +167,65 @@ public class TokenTests {
 		
 	
 	@Test
-	public void test_get_token_empty_file(){
+	public void test_get_token_white_space_file(){
 		Printtokens2 myTokenTest = new Printtokens2();
 		BufferedReader actualReaderOutput;
-		actualReaderOutput = myTokenTest.open_token_stream(noTextFile);
-		
+		actualReaderOutput = myTokenTest.open_token_stream(whiteSpaceFile);
 		String actualOutput = myTokenTest.get_token(actualReaderOutput);
 		assertEquals(null,actualOutput);
 		
 	}
 	
 	@Test
-	public void test_get_token_default_file(){
+	public void test_get_token_special_start(){
 		Printtokens2 myTokenTest = new Printtokens2();
 		BufferedReader actualReaderOutput;
-		actualReaderOutput = myTokenTest.open_token_stream(defaultFile);
-		
+		actualReaderOutput = myTokenTest.open_token_stream(specialStartFile);
 		String actualOutput = myTokenTest.get_token(actualReaderOutput);
-		assertEquals(null,actualOutput);
+		assertEquals("[",actualOutput);
+		
+	}
+	@Test
+	public void test_get_token_string_to_eof(){
+		Printtokens2 myTokenTest = new Printtokens2();
+		BufferedReader actualReaderOutput;
+		actualReaderOutput = myTokenTest.open_token_stream(stringToEofFile);
+		String actualOutput = myTokenTest.get_token(actualReaderOutput);
+		assertEquals("\"",actualOutput);
 		
 	}
 	
 	@Test
-	public void test_get_token_return_characters(){
+	public void test_get_token_comment_without_close(){
 		Printtokens2 myTokenTest = new Printtokens2();
 		BufferedReader actualReaderOutput;
-		actualReaderOutput = myTokenTest.open_token_stream(onlyReturnsFile);
-		
+		actualReaderOutput = myTokenTest.open_token_stream(commentNoEnd);
 		String actualOutput = myTokenTest.get_token(actualReaderOutput);
-		assertEquals(null,actualOutput);
+		assertEquals(";  ",actualOutput);
 		
 	}
 	
 	@Test
-	public void test_get_token_special_char(){
+	public void test_get_token_immidiate_closed_string(){
 		Printtokens2 myTokenTest = new Printtokens2();
 		BufferedReader actualReaderOutput;
-		actualReaderOutput = myTokenTest.open_token_stream(specialCharFile);
-		
+		actualReaderOutput = myTokenTest.open_token_stream(immediateClosedStringFile);
 		String actualOutput = myTokenTest.get_token(actualReaderOutput);
-		assertEquals(null,actualOutput);
+		System.out.println(actualOutput);
+		assertEquals("\"",actualOutput);
 		
 	}
 	
+	@Test
+	public void test_get_token_comment_to_special(){
+		Printtokens2 myTokenTest = new Printtokens2();
+		BufferedReader actualReaderOutput;
+		actualReaderOutput = myTokenTest.open_token_stream(commentToSpecialFile);
+		String actualOutput = myTokenTest.get_token(actualReaderOutput);
+		System.out.println(actualOutput);
+		assertEquals(";  ",actualOutput);
+		
+	}
 		
 }
 	

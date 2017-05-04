@@ -97,75 +97,89 @@ public class Printtokens2 {
 	/* DESCRIPTION: according the syntax of tokens,dealing  */
 	/*              with different case  and get one token  */
 	/********************************************************/
-	String get_token(BufferedReader br)
-	{ 
-	  int i=0,j;
-	  int id=0;
-	  int res = 0;
-	  char ch = '\0';
-	 
-	  StringBuilder sb = new StringBuilder();
+	String get_token(BufferedReader br) {
+		int i = 0, j;
+		int id = 0;
+		int res = 0;
+		char ch = '\0';
 
-	   try {
-		   res = get_char(br);
-		   if (res == -1) {
-			   return null;
-		   }
-		   ch = (char)res;
-		while(ch==' '||ch=='\n' || ch == '\r')      /* strip all blanks until meet characters */
-	      {
+		StringBuilder sb = new StringBuilder();
+
+		try {
 			res = get_char(br);
-			ch = (char)res;
-	      } 
-	   
-	   if(res == -1)return null;
-	   sb.append(ch);
-	   if(is_spec_symbol(ch)==true)return sb.toString(); 
-	   if(ch =='"')id=2;    /* prepare for string */
-	   if(ch ==59)id=1;    /* prepare for comment */   
-	   
-	   res = get_char(br);
-	   if (res == -1) {
-		   unget_char(ch,br);
-		   return sb.toString();
-	   }
-	   ch = (char)res;
+			/*TODO: Not Needed
+			if (res == -1) {
+				return null;
+			}
+			*/ 
+			ch = (char) res;
+			while (ch == ' ' || ch == '\n' || ch == '\r') /*
+														 * strip all blanks
+														 * until meet characters
+														 */
+			{
+				res = get_char(br);
+				ch = (char) res;
+			}
 
-	   while (is_token_end(id,res) == false)/* until meet the end character */
-	   {
-	       sb.append(ch);
-	       br.mark(4);
-	       res = get_char(br);
-		   if (res == -1) {
-			   break;
-		   }
-		   ch = (char)res;
-	   }
-	 
-	   if(res == -1)       /* if end character is eof token    */
-	      { unget_char(ch,br);        /* then put back eof on token_stream */
-	        return sb.toString();
-	      }
-	 
-	   if(is_spec_symbol(ch)==true)     /* if end character is special_symbol */
-	      { unget_char(ch,br);        /* then put back this character       */
-	        return sb.toString();
-	      }
-	   if(id==1)                  /* if end character is " and is string */
-	     {                     
-	       sb.append(ch);
-	       return sb.toString(); 
-	     }
-	   if(id==0 && ch==59)
-	                                   /* when not in string or comment,meet ";" */
-	     { unget_char(ch,br);       /* then put back this character         */
-	       return sb.toString(); 
-	     }
-	} catch (IOException e) {
-		e.printStackTrace();
-	}
-	   
-	   return sb.toString();                   /* return nomal case token             */
+			if (res == -1) return null;
+			sb.append(ch);
+			if (is_spec_symbol(ch) == true)//()[]'`, basically any file starting with these
+				return sb.toString();
+			if (ch == '"')
+				id = 2; /* prepare for string */
+			if (ch == 59)
+				id = 1; /* prepare for comment */
+
+			res = get_char(br);
+			if (res == -1) {//EOF on second or third non space character
+				unget_char(ch, br);
+				return sb.toString();
+			}
+			ch = (char) res;
+
+			while (is_token_end(id, res) == false)/* until meet the end character */
+			{
+				sb.append(ch);
+				br.mark(4);
+				res = get_char(br);
+				if (res == -1) {//EOF after start
+					break;
+				}
+				ch = (char) res;
+			}
+
+			if (res == -1) /* if end character is eof token after close of special*/
+			{
+				unget_char(ch, br); /* then put back eof on token_stream */
+				return sb.toString();
+			}
+			//TODO I don't think this case is possible because
+			//In order to get here ch needs to be true to "is_token_end" but also be a special symbol.
+			if (is_spec_symbol(ch) == true) /* !! Character after comment/string is special
+											 * if end character is
+											 * special_symbol
+											 */
+			{
+				unget_char(ch, br); /* then put back this character */
+				return sb.toString();
+			}
+			if (id == 1) /* if end character is " and is string */
+			{
+				sb.append(ch);
+				return sb.toString();
+			}
+			if (id == 0 && ch == 59)
+			/* when not in string or comment,meet ";" */
+			{
+				unget_char(ch, br); /* then put back this character */
+				return sb.toString();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return sb.toString(); /* return nomal case token */
 	}
 	
 	/*******************************************************/
