@@ -19,6 +19,10 @@ public class TokenTests {
 	static String commentNoEnd = "./TestingFiles/Test_File_Comment_Without_End.txt";
 	static String immediateClosedStringFile = "./TestingFiles/Test_File_Immediate_Closed_String.txt";
 	static String commentToSpecialFile = "./TestingFiles/Test_File_Comment_To_Special.txt";
+	static String normalStringFile = "./TestingFiles/Test_File_Normal_String.txt";
+	static String normalCommentFile = "./TestingFiles/Test_File_Normal_Comment.txt";
+	static String normalToSpecial = "./TestingFiles/Test_File_Normal_To_Special.txt";
+	static String normalToComment = "./TestingFiles/Test_File_Normal_To_Comment.txt";
 	/*
 	 * I'm not sure how to test two Buffered Readers with STD input
 	 * Might Look Into This Later
@@ -96,7 +100,7 @@ public class TokenTests {
 			BufferedReader brokenReader = new BufferedReader(fr);
 			fr.close();
 			int actualOutput = myTokenTest.get_char(brokenReader);
-			int expectedOutput = 0;
+			int expectedOutput = -1;
 			assertEquals(expectedOutput,actualOutput);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -211,21 +215,62 @@ public class TokenTests {
 		BufferedReader actualReaderOutput;
 		actualReaderOutput = myTokenTest.open_token_stream(immediateClosedStringFile);
 		String actualOutput = myTokenTest.get_token(actualReaderOutput);
-		System.out.println(actualOutput);
-		assertEquals("\"",actualOutput);
+		assertEquals("\"\"",actualOutput);
 		
 	}
 	
 	@Test
-	public void test_get_token_comment_to_special(){
+	public void test_get_token_normal_string(){
 		Printtokens2 myTokenTest = new Printtokens2();
 		BufferedReader actualReaderOutput;
-		actualReaderOutput = myTokenTest.open_token_stream(commentToSpecialFile);
+		actualReaderOutput = myTokenTest.open_token_stream(normalStringFile);
 		String actualOutput = myTokenTest.get_token(actualReaderOutput);
-		System.out.println(actualOutput);
-		assertEquals(";  ",actualOutput);
+		assertEquals("\"Hello World\"",actualOutput);
 		
 	}
+	
+	@Test
+	public void test_get_token_normal_comment(){
+		Printtokens2 myTokenTest = new Printtokens2();
+		BufferedReader actualReaderOutput;
+		actualReaderOutput = myTokenTest.open_token_stream(normalCommentFile);
+		String actualOutput = myTokenTest.get_token(actualReaderOutput);
+		assertEquals(";Hello World",actualOutput);
+		
+	}
+	
+	@Test
+	public void test_get_token_normal_to_special(){
+		Printtokens2 myTokenTest = new Printtokens2();
+		BufferedReader actualReaderOutput;
+		actualReaderOutput = myTokenTest.open_token_stream(normalToSpecial);
+		String actualOutput = myTokenTest.get_token(actualReaderOutput);
+		assertEquals("NormalToSpecial",actualOutput);
+		
+	}
+	
+	@Test
+	public void test_get_token_normal_to_comment(){
+		Printtokens2 myTokenTest = new Printtokens2();
+		BufferedReader actualReaderOutput;
+		actualReaderOutput = myTokenTest.open_token_stream(normalToComment);
+		String actualOutput = myTokenTest.get_token(actualReaderOutput);
+		assertEquals("NormalToComment",actualOutput);
+		
+	}
+	
+	@Test
+	public void test_get_token_broken_buffer() throws IOException{
+		Printtokens2 myTokenTest = new Printtokens2();
+		BufferedReader actualReaderOutput;
+		actualReaderOutput = myTokenTest.open_token_stream(normalToComment);
+		actualReaderOutput.close();
+		String actualOutput = myTokenTest.get_token(actualReaderOutput);
+		assertEquals(null,actualOutput);
+		
+	}
+	
+	
 		
 }
 	
