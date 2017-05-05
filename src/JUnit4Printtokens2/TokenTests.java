@@ -142,7 +142,7 @@ public class TokenTests {
 	// system.in
 
 	@Test
-	public void test_get_token_white_space_file() {
+	public void test_get_token_stream_white_space_file() {
 		Printtokens2 myTokenTest = new Printtokens2();
 		BufferedReader actualReaderOutput;
 		actualReaderOutput = myTokenTest.open_token_stream(whiteSpaceFile);
@@ -185,8 +185,7 @@ public class TokenTests {
 	public void test_get_token_immidiate_closed_string() {
 		Printtokens2 myTokenTest = new Printtokens2();
 		BufferedReader actualReaderOutput;
-		actualReaderOutput = myTokenTest
-				.open_token_stream(immediateClosedStringFile);
+		actualReaderOutput = myTokenTest.open_token_stream(immediateClosedStringFile);
 		String actualOutput = myTokenTest.get_token(actualReaderOutput);
 		assertEquals("\"\"", actualOutput);
 
@@ -444,8 +443,8 @@ public class TokenTests {
 		ByteArrayOutputStream errContent = new ByteArrayOutputStream();
 	    System.setOut(new PrintStream(outContent));
 	    System.setErr(new PrintStream(errContent));
-		myTokenTest.print_spec_symbol(")");
-		assertEquals("rparen.\n", outContent.toString());
+		myTokenTest.print_spec_symbol("(");
+		assertEquals("lparen.\n", outContent.toString());
 	    System.setOut(null);
 	    System.setErr(null);
 		}
@@ -456,7 +455,7 @@ public class TokenTests {
 		ByteArrayOutputStream errContent = new ByteArrayOutputStream();
 	    System.setOut(new PrintStream(outContent));
 	    System.setErr(new PrintStream(errContent));
-		myTokenTest.print_spec_symbol(")");
+	    myTokenTest.print_spec_symbol(")");
 		assertEquals("rparen.\n", outContent.toString());
 	    System.setOut(null);
 	    System.setErr(null);
