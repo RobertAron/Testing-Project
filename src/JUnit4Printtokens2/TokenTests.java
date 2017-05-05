@@ -3,10 +3,14 @@ package JUnit4Printtokens2;
 import static org.junit.Assert.*;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintStream;
 
 import org.junit.Test;
 
@@ -246,6 +250,161 @@ public class TokenTests {
 		assertEquals(1, Printtokens2.token_type("lambda"));
 		assertEquals(1, Printtokens2.token_type("=>"));
 
+	}
+	
+	@Test
+	public void test_token_type_spec() {
+		assertEquals(2, Printtokens2.token_type("("));
+		assertEquals(2, Printtokens2.token_type(")"));
+		assertEquals(2, Printtokens2.token_type("["));
+		assertEquals(2, Printtokens2.token_type("]"));
+		assertEquals(2, Printtokens2.token_type("'"));
+		assertEquals(2, Printtokens2.token_type("`"));
+		assertEquals(2, Printtokens2.token_type(","));
+
+
+	}
+	
+	@Test
+	public void test_token_type_identifier() {
+		assertEquals(3, Printtokens2.token_type("ab"));
+	}
+	@Test
+	public void test_token_type_num_constant() {
+		assertEquals(41, Printtokens2.token_type("123"));
+	}
+	
+	@Test
+	public void test_token_type_str_constant() {
+		assertEquals(42, Printtokens2.token_type("\"Test Const\""));
+		assertEquals(42, Printtokens2.token_type("\"Test Const"));
+	}
+	
+	@Test
+	public void test_token_type_char_constant() {
+		assertEquals(43, Printtokens2.token_type("#a12"));
+	}
+	
+	@Test
+	public void test_token_type_comment() {
+		assertEquals(5, Printtokens2.token_type(";123"));
+	}
+	@Test
+	public void test_token_type_error() {
+		assertEquals(-1, Printtokens2.token_type("#123"));
+	}
+	
+	@Test
+	public void test_print_token() throws IOException {
+		Printtokens2 myTokenTest = new Printtokens2();
+		
+		//error
+		{
+		ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+		ByteArrayOutputStream errContent = new ByteArrayOutputStream();
+	    System.setOut(new PrintStream(outContent));
+	    System.setErr(new PrintStream(errContent));
+		myTokenTest.print_token("#123");
+		assertEquals("error,\"" + "#123" + "\".\n", outContent.toString());
+	    System.setOut(null);
+	    System.setErr(null);
+		}
+	    
+		//keyword
+		{
+		ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+		ByteArrayOutputStream errContent = new ByteArrayOutputStream();
+	    System.setOut(new PrintStream(outContent));
+	    System.setErr(new PrintStream(errContent));
+		myTokenTest.print_token("and");
+		assertEquals("keyword,\"" + "and" + "\".\n", outContent.toString());
+	    System.setOut(null);
+	    System.setErr(null);
+		}
+		
+		//spec
+		{
+		ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+		ByteArrayOutputStream errContent = new ByteArrayOutputStream();
+	    System.setOut(new PrintStream(outContent));
+	    System.setErr(new PrintStream(errContent));
+		myTokenTest.print_token("(");
+		assertEquals("lparen.\n", outContent.toString());
+	    System.setOut(null);
+	    System.setErr(null);
+		}
+		
+		//identifier
+		{
+		ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+		ByteArrayOutputStream errContent = new ByteArrayOutputStream();
+	    System.setOut(new PrintStream(outContent));
+	    System.setErr(new PrintStream(errContent));
+		myTokenTest.print_token("ab");
+		assertEquals("identifier,\"" + "ab" + "\".\n", outContent.toString());
+	    System.setOut(null);
+	    System.setErr(null);
+		}
+		
+		
+		//num_const
+		{
+		ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+		ByteArrayOutputStream errContent = new ByteArrayOutputStream();
+	    System.setOut(new PrintStream(outContent));
+	    System.setErr(new PrintStream(errContent));
+		myTokenTest.print_token("123");
+		assertEquals("numeric," + "123" + ".\n", outContent.toString());
+	    System.setOut(null);
+	    System.setErr(null);
+		}
+		
+		//String
+		{
+		ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+		ByteArrayOutputStream errContent = new ByteArrayOutputStream();
+	    System.setOut(new PrintStream(outContent));
+	    System.setErr(new PrintStream(errContent));
+		myTokenTest.print_token("\"String\"");
+		assertEquals("string," + "\"String\"" + ".\n", outContent.toString());
+	    System.setOut(null);
+	    System.setErr(null);
+		}
+		
+		//char_constant
+		{
+		ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+		ByteArrayOutputStream errContent = new ByteArrayOutputStream();
+	    System.setOut(new PrintStream(outContent));
+	    System.setErr(new PrintStream(errContent));
+		myTokenTest.print_token("#a12");
+		assertEquals("character,\"" + "#a12".charAt(1) + "\".\n", outContent.toString());
+	    System.setOut(null);
+	    System.setErr(null);
+		}
+		
+		
+		
+		
+		
+		
+	    System.setOut(System.out);
+	    System.setErr(System.err);
+	}
+	
+	
+	
+	@Test
+	public void test_main() throws IOException {
+		String systemInData = ";JustAComment";
+		InputStream testInput = new ByteArrayInputStream( systemInData.getBytes("UTF-8") );
+		System.setIn(testInput);
+		String[] args= new String[0];
+		Printtokens2.main(args);
+		System.setIn(System.in);
+		
+		
+		
 	}
 
 }

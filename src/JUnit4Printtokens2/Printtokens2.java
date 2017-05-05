@@ -81,14 +81,14 @@ public class Printtokens2 {
 	/* DESCRIPTION: when filename is EMPTY,choice standard  */
 	/*              input device as input source            */
 	/********************************************************/
-	BufferedReader open_token_stream(String fname)
-	{
+	BufferedReader open_token_stream(String fname) {
 		BufferedReader br;
-	 if(fname.equals(null))
-	    br=open_character_stream(null);
-	 else
-	    br=open_character_stream(fname);
-	 return br;
+		//TODO fname cannot equal null, changed to ""
+		if (fname.equals(""))
+			br = open_character_stream(null);
+		else
+			br = open_character_stream(fname);
+		return br;
 	}
 	
 	/********************************************************/
@@ -234,38 +234,35 @@ public class Printtokens2 {
 	/* NAME:	print_token                             */
 	/* INPUT:	a token                                 */
 	/****************************************************/
-	void print_token(String tok)
-	{ int type;
-	  type=token_type(tok);
-	 if(type==error)
-	   { 
-	   	System.out.print("error,\"" + tok + "\".\n");
-	   }
-	   
-	 if(type==keyword)
-	   {
-	   System.out.print("keyword,\"" + tok + "\".\n");
-	   }
-	  
-	 if(type==spec_symbol)print_spec_symbol(tok);
-	 if(type==identifier)
-	   {
-	   System.out.print("identifier,\"" + tok + "\".\n");
-	   }
-	 if(type==num_constant)
-	   {
-	   System.out.print("numeric," + tok + ".\n");
-	   }
-	 if(type==str_constant)
-	   {
-	   System.out.print("string," + tok + ".\n");
-	   }
-	 if(type==char_constant)
-	   {
-	    System.out.print("character,\"" + tok.charAt(1) + "\".\n");
-	   }
+	void print_token(String tok) {
+		int type;
+		type = token_type(tok);
+		if (type == error) {
+			System.out.print("error,\"" + tok + "\".\n");
+		}
 
-	   }
+		if (type == keyword) {
+			System.out.print("keyword,\"" + tok + "\".\n");
+		}
+
+		if (type == spec_symbol)
+			print_spec_symbol(tok);
+		if (type == identifier) {
+			System.out.print("identifier,\"" + tok + "\".\n");
+		}
+		// TODO: these outputs do not currently match the rest?
+		if (type == num_constant) {
+			System.out.print("numeric," + tok + ".\n");
+		}
+		if (type == str_constant) {
+			System.out.print("string," + tok + ".\n");
+		}
+		//TODO: char at 1? Is this expected?
+		if (type == char_constant) {
+			System.out.print("character,\"" + tok.charAt(1) + "\".\n");
+		}
+
+	}
 
 	/* the code for tokens judgment function */
 
@@ -323,7 +320,8 @@ public class Printtokens2 {
 	    {
 	    while ( i < str.length() && str.charAt(i) != '\0' )   /* until meet token end sign */
 	      {
-	       if(Character.isDigit(str.charAt(i+1)))	
+	    	//TODO not i+1, just i
+	       if(Character.isDigit(str.charAt(i)))	
 	         i++;
 	       else
 	         return false;
