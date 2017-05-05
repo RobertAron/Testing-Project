@@ -1,6 +1,8 @@
 package JUnit4Printtokens2;
 
 import static org.junit.Assert.*;
+import static org.junit.contrib.*;
+
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -400,6 +402,7 @@ public class TokenTests {
 		InputStream testInput = new ByteArrayInputStream( systemInData.getBytes("UTF-8") );
 		System.setIn(testInput);
 		String[] args= new String[0];
+		expectSystemExit();
 		Printtokens2.main(args);
 		System.setIn(System.in);
 		
