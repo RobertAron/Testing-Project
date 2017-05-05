@@ -477,10 +477,13 @@ public class Printtokens2 {
 		if (args.length == 0) {	/* if not given filename,take as '""' */
 			fname = new String();
 		} else if (args.length == 1) {
-			fname = args[1];
+			//TODO args[1] should be args[0]
+			fname = args[0];
 		} else {
 			System.out.print("Error!,please give the token stream\n");
-			System.exit(0);
+			return;
+			//Not Sure how to test this.
+			//System.exit(0);
 		}
 		Printtokens2 t = new Printtokens2();
 		BufferedReader br = t.open_token_stream(fname);	/* open token stream */
@@ -489,7 +492,7 @@ public class Printtokens2 {
 			t.print_token(tok);
 			tok = t.get_token(br);
 		}
-		
-		System.exit(0);
+		//Not sure how to test this.
+		//System.exit(0);
 	}
 }

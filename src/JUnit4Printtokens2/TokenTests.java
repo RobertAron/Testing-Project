@@ -1,13 +1,13 @@
 package JUnit4Printtokens2;
 
 import static org.junit.Assert.*;
-import static org.junit.contrib.*;
-
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -390,24 +390,148 @@ public class TokenTests {
 		
 		
 		
-	    System.setOut(System.out);
-	    System.setErr(System.err);
+	    System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out)));
+	    System.setErr(new PrintStream(new FileOutputStream(FileDescriptor.err)));
 	}
 	
 	
 	
 	@Test
-	public void test_main() throws IOException {
+	public void test_main_no_entry() throws IOException {
 		String systemInData = ";JustAComment";
 		InputStream testInput = new ByteArrayInputStream( systemInData.getBytes("UTF-8") );
 		System.setIn(testInput);
 		String[] args= new String[0];
-		expectSystemExit();
 		Printtokens2.main(args);
-		System.setIn(System.in);
 		
 		
 		
 	}
+	
+	
+	
+	@Test
+	public void test_main_one_entry() throws IOException {
+		String[] args= new String[1];
+		args[0] = normalToComment;
+		System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out)));
+		Printtokens2.main(args);
+		
+		
+		
+	}
+	
+	@Test
+	public void test_main_two_entry() throws IOException {
+		String[] args= new String[2];
+		args[0] = normalToComment;
+		System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out)));
+		Printtokens2.main(args);
+		
+		
+		
+	}
+	
+	
+	@Test
+	public void test_print_spec_symbol(){
+		Printtokens2 myTokenTest = new Printtokens2();
+		
+		
+		//)
+		{
+		ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+		ByteArrayOutputStream errContent = new ByteArrayOutputStream();
+	    System.setOut(new PrintStream(outContent));
+	    System.setErr(new PrintStream(errContent));
+		myTokenTest.print_spec_symbol(")");
+		assertEquals("rparen.\n", outContent.toString());
+	    System.setOut(null);
+	    System.setErr(null);
+		}
+		
+		//)
+		{
+		ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+		ByteArrayOutputStream errContent = new ByteArrayOutputStream();
+	    System.setOut(new PrintStream(outContent));
+	    System.setErr(new PrintStream(errContent));
+		myTokenTest.print_spec_symbol(")");
+		assertEquals("rparen.\n", outContent.toString());
+	    System.setOut(null);
+	    System.setErr(null);
+		}
+		
+		//[
+		{
+		ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+		ByteArrayOutputStream errContent = new ByteArrayOutputStream();
+	    System.setOut(new PrintStream(outContent));
+	    System.setErr(new PrintStream(errContent));
+		myTokenTest.print_spec_symbol("[");
+		assertEquals("lsquare.\n", outContent.toString());
+	    System.setOut(null);
+	    System.setErr(null);
+		}
+		
+		//]
+		{
+		ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+		ByteArrayOutputStream errContent = new ByteArrayOutputStream();
+	    System.setOut(new PrintStream(outContent));
+	    System.setErr(new PrintStream(errContent));
+		myTokenTest.print_spec_symbol("]");
+		assertEquals("rsquare.\n", outContent.toString());
+	    System.setOut(null);
+	    System.setErr(null);
+		}
+		//)
+		{
+		ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+		ByteArrayOutputStream errContent = new ByteArrayOutputStream();
+	    System.setOut(new PrintStream(outContent));
+	    System.setErr(new PrintStream(errContent));
+		myTokenTest.print_spec_symbol("'");
+		assertEquals("quote.\n", outContent.toString());
+	    System.setOut(null);
+	    System.setErr(null);
+		}
+		
+		//1
+		{
+		ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+		ByteArrayOutputStream errContent = new ByteArrayOutputStream();
+	    System.setOut(new PrintStream(outContent));
+	    System.setErr(new PrintStream(errContent));
+		myTokenTest.print_spec_symbol("`");
+		assertEquals("bquote.\n", outContent.toString());
+	    System.setOut(null);
+	    System.setErr(null);
+		}
+		
+		//,
+		{
+		ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+		ByteArrayOutputStream errContent = new ByteArrayOutputStream();
+	    System.setOut(new PrintStream(outContent));
+	    System.setErr(new PrintStream(errContent));
+		myTokenTest.print_spec_symbol(",");
+		assertEquals("comma.\n", outContent.toString());
+	    System.setOut(null);
+	    System.setErr(null);
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+	    System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out)));
+	    System.setErr(new PrintStream(new FileOutputStream(FileDescriptor.err)));
+		
+	}
+
 
 }
